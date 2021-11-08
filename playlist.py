@@ -23,7 +23,8 @@ def findCommonTracks(fileNames):
         trackNames = set()
 
         # read in playlist
-        plist = plistlib.readPlist(fileName)
+        with open(fileName, 'rb') as f:
+            plist = plistlib.load(f)
 
         # get the tracks
         tracks = plist['Tracks']
@@ -43,8 +44,8 @@ def findCommonTracks(fileNames):
     commonTracks = set.intersection(*trackNameSets)
 
     # write to file
-    if len(commonTracks > 0):
-        f = open("common.txt", 'w')
+    if len(commonTracks) > 0:
+        f = open("common.txt", 'wb')
         for val in commonTracks:
             s = '%s\n' % val
             f.write(s.encode('UTF-8'))
