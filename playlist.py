@@ -59,7 +59,8 @@ def findCommonTracks(fileNames):
 def plotStats(fileName):
 
     # read in the playlist
-    plist = plistlib.readPlist(fileName)
+    with open(fileName, 'rb') as f:
+        plist = plistlib.load(f)
 
     # get the tracks from the playlist
     tracks = plist['Tracks']
@@ -108,7 +109,8 @@ def findDuplicates(fileName):
     print('Finding duplicate tracks in %s...' % fileName)
 
     # read in playlist
-    plist = plistlib.readPlist(fileName)
+    with open(fileName, 'rb') as f:
+        plist = plistlib.load(f)
 
     # get the tracks from the Tracks dictionary
     tracks = plist['Tracks']
@@ -126,7 +128,7 @@ def findDuplicates(fileName):
             if name in trackNames:
                 # if a name and duration match, increment the count
                 # round the track length to the nearest second
-                if duration //1000 == trackNames[name][0]//1000:
+                if duration//1000 == trackNames[name][0]//1000:
                     count = trackNames[name][1]
                     trackNames[name] = (duration, count+1)
 
@@ -149,7 +151,7 @@ def findDuplicates(fileName):
         print('Found %d duplicates. Track names saved to dup.txt' % len(dups))
     else:
         print('No duplicate tracks found.')
-    f = open('dups.txt', 'w')
+    f = open('dups.txt', 'wb')
     for val in dups:
         f.write('[%d] %s\n' % (val[0], val[1]))
     f.close()
